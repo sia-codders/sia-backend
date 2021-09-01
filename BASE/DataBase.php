@@ -24,5 +24,18 @@ class DataBase{
         }
         pg_close($this->conn);
     }
-        
+    public function consultar_uno($script)
+    {
+        $data = pg_query($this->conn,$script);
+        $resultado = pg_fetch_object($data);
+        pg_close($this->conn);
+        return $resultado;
+    }
+     public function consultar_todos($script)
+    {
+        $data = pg_query($this->conn,$script);
+        $resultado = pg_fetch_all($data);
+        pg_close($this->conn);
+        return $resultado;
+    }
 }
