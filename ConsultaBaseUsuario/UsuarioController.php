@@ -2,13 +2,13 @@
 require_once '../BASE/DataBase.php';
 class UsuarioController
 {
-    private $dataPost;
+    private $data_recibida;
     private $email;
     private $db='conjuntosdes';
     private $respuesta;
     public function __construct($json) {
-        $this->dataPost = json_decode($json);        
-        $this->email= pg_escape_string($this->dataPost->email); 
+        $this->data_recibida = json_decode($json);        
+        $this->email= pg_escape_string($this->data_recibida->email); 
         $this->consultar_usuario();
     }
     private function consultar_usuario(){
@@ -22,17 +22,18 @@ class UsuarioController
         $this->respuesta = $dbName->consultar_todos($sentencia);
     }
     public function generar_respuesta() {
-        if($this->respuesta)
+        if(isset($this->respuesta))
         {
             return array(
-                'estado'=>'ok',
-                'data'=> $this->respuesta
+                'estado'=>'OK',
+                'datos_base'=> $this->respuesta
             );
         }
         else
         {
             return array(
-                'estado'=>'error'                
+                'estado'=>'ERROR',
+                'datos_base'=>'vacio'               
             );
         }
     } 

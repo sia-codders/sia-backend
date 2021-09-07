@@ -3,53 +3,37 @@
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: *");
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+//Variable respuesta json
+$respuesta_consulta = null;
 //Por que tipo de metodo se envia la informacion
 $method = $_SERVER['REQUEST_METHOD'];
 $salto_de_linea = "\n";
 echo $salto_de_linea;
-if ($method == 'POST') {
-    require_once('./UsuarioController.php'); 
-    require_once('../Helpers/Helpers.php'); 
-    
-    if ($_POST && isset($_POST['json']) && isset(getallheaders()['token'])) {
-        //cuando los parametros POST esten OK 
-        $json = $_POST['json'];
-        $token= getallheaders()['token']; 
-        
+if ($method == 'GET') {
+    require_once('./UsuarioController.php');
+    require_once('../Helpers/Helpers.php');
+
+    if ($_GET && isset($_GET['json']) && isset(getallheaders()['token'])) {
+        //cuando los parametros GET esten OK 
+        $json = $_GET['json'];
+        $token = getallheaders()['token'];
+
         $helper = new Helpers();
-        if ($helper->validar_token($token)){        
+        if ($helper->validar_token($token)) {
             $controlador = new UsuarioController($json);
-            $data = $controlador->generar_respuesta();
-            if ($data['estado'] == 'ok') {
-                $response = array(
-                    'estado' => 'OK',
-                    'mensaje' => 'DATOS CORRECTOS',
-                    'datos' => $data['data']
-                );
+            $data_respuesta = $controlador->generar_respuesta();
+            if ($data_respuesta['estado'] == 'OK') {
+                $helper->retorno_respuesta("OK", "DATOS CORRECTOS", $data_respuesta['datos_base']);
             } else {
-                $response = array(
-                    'estado' => 'error',
-                    'mensaje' => 'NO EXISTEN BASES PARA ESTE USUARIO'
-                );
+                $helper->retorno_respuesta("ERROR", "NO EXISTEN BASES PARA ESTE USUARIO", "VACIO");
             }
-        }
-        else{
-            $response = array(
-                'estado' => 'error',
-                'mensaje' => 'NO TIENE PERMISOS, USUARIO DESCONOCIDO'
-            );
+        } else {
+            $helper->retorno_respuesta("ERROR", "NO TIENE PERMISO, USUARIO DESCONOCIDO", "VACIO");
         }
     } else {
-        //cuando los parametros POST esten not OK 
-        $response = array(
-            'estado' => 'error',
-            'mensaje' => 'NO EXISTE PARAMETROS'
-        );
-    }    
+        //cuando los parametros esten not OK 
+        $helper->retorno_respuesta("ERROR", "REVISAR PARAMETROS ENVIADOS", "VACIO");
+    }
 } else {
-    $response = array(
-        'estado' => 'error',
-        'mensaje' => 'No, NO, NO, Solo trabajamos con el Metodo POST'
-    );
+    $helper->retorno_respuesta("ERROR", "No, NO, NO, Es consulta, se requiere Método GET", "VACIO");
 }
-echo json_encode($response);
