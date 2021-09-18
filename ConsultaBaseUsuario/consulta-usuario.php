@@ -23,17 +23,17 @@ if ($method == 'GET') {
             $controlador = new UsuarioController($json);
             $data_respuesta = $controlador->generar_respuesta();
             if ($data_respuesta['estado'] == 'OK') {
-                $helper->retorno_respuesta("OK", "DATOS CORRECTOS", $data_respuesta['datos_base']);
+                $helper->retorno_respuesta("OK", "DATOS CORRECTOS",NULL, $data_respuesta['datos_base']);
             } else {
-                $helper->retorno_respuesta("ERROR", "NO EXISTEN BASES PARA ESTE USUARIO", "VACIO");
+                $helper->retorno_respuesta("ERROR", "NO EXISTEN BASES PARA ESTE USUARIO",NULL, "VACIO");
             }
         } else {
-            $helper->retorno_respuesta("ERROR", "NO TIENE PERMISO, USUARIO DESCONOCIDO", "VACIO");
+            $helper->retorno_respuesta("ERROR", "NO TIENE PERMISO, USUARIO DESCONOCIDO",NULL, "VACIO");
         }
     } else {
         //cuando los parametros esten not OK 
-        $helper->retorno_respuesta("ERROR", "REVISAR PARAMETROS ENVIADOS", "VACIO");
+        $helper->retorno_respuesta("ERROR", "REVISAR PARAMETROS ENVIADOS",NULL, "VACIO");
     }
 } else {
-    $helper->retorno_respuesta("ERROR", "No, NO, NO, Es consulta, se requiere Método GET", "VACIO");
+    $helper->retorno_respuesta("ERROR", "No, NO, NO, Es consulta, se requiere Método GET", NULL,"VACIO");
 }
