@@ -16,19 +16,20 @@ class DataBase{
     public function execute($script) 
     {
         if(pg_query($this->conn,$script)){
+            pg_close($this->conn);
             return true;
         }
         else
         {
+            pg_close($this->conn);
             return false;
-        }
-        pg_close($this->conn);
+        }        
     }
     public function consultar_uno($script)
     {
-        $data = pg_query($this->conn,$script);
-        $resultado = pg_fetch_object($data);
-        pg_close($this->conn);
+        $data = pg_query($this->conn,$script);        
+        $resultado = pg_fetch_row($data);
+        pg_close($this->conn);        
         return $resultado;
     }
      public function consultar_todos($script)
