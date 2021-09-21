@@ -21,8 +21,8 @@ class UsuarioController
                         and  bu.idbaseusuario = b.idbaseusuario ;";       
         $this->respuesta = $dbName->consultar_todos($sentencia);
     }
-    public function generar_respuesta() {
-        if(isset($this->respuesta))
+    public function generar_respuesta() {        
+        if(isset($this->respuesta) && count($this->respuesta)>0)
         {
             return array(
                 'estado'=>'OK',
