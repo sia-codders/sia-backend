@@ -15,24 +15,29 @@ class DataBase{
     
     public function execute($script) 
     {
+        $resp = false;
         if(pg_query($this->conn,$script)){
             pg_close($this->conn);
-            return true;
+            $resp = true;
         }
-        else
-        {
-            pg_close($this->conn);
-            return false;
-        }        
+        pg_close($this->conn);
+        return $resp;
     }
-    public function consultar_uno($script)
-    {
-        $data = pg_query($this->conn,$script);        
-        $resultado = pg_fetch_row($data);
-        pg_close($this->conn);        
-        return $resultado;
-    }
-     public function consultar_todos($script)
+//    public function consultar_uno($script)
+//    {
+//        $data = pg_query($this->conn,$script);        
+//        $resultado = pg_fetch_row($data);
+//        pg_close($this->conn);        
+//        return $resultado;
+//    }
+//     public function consultar_todos($script)
+//    {
+//        $data = pg_query($this->conn,$script);
+//        $resultado = pg_fetch_all($data);
+//        pg_close($this->conn);
+//        return $resultado;
+//    }
+    public function consultar_script($script)
     {
         $data = pg_query($this->conn,$script);
         $resultado = pg_fetch_all($data);

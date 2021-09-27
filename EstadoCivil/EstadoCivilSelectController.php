@@ -1,7 +1,6 @@
 <?php
 
 require_once '../BASE/DataBase.php';
-require_once '../Helpers/Helpers.php';
 
 class EstadoCivilSelectController {
 
@@ -11,10 +10,13 @@ class EstadoCivilSelectController {
     private $helper;
 
     public function __construct($json) {
-        $this->helper = new Helpers();
         $data_recibida = json_decode($json);
         $this->referencia_a_buscar = pg_escape_string($data_recibida->referencia_a_buscar);
         $tipo_script = pg_escape_string($data_recibida->tipo_scritp);
+        $this->decidir_metodo_a_ejecutar($tipo_script);
+    }
+
+    private function decidir_metodo_a_ejecutar($tipo_script) {
         switch ($tipo_script) {
             case 's-t':
                 $this->consultar_estado_civil_todos();
@@ -28,6 +30,9 @@ class EstadoCivilSelectController {
             case 's-n':
                 $this->consultar_estado_civil_por_nombre();
                 break;
+            default :
+                $this->respuesta = null;
+                break;
         }
     }
 
@@ -35,7 +40,7 @@ class EstadoCivilSelectController {
         //Creado: Santiago Fecha: 2021-09-12 20:10
         $dbName = new DataBase($this->db);
         $sentencia = "select id,nombre,detalle from estado_civil ec;";
-        $this->respuesta = $dbName->consultar_todos($sentencia);
+        $this->respuesta = $dbName->consultar_script($sentencia);
     }
 
     private function consultar_estado_civil_por_referencia() {
@@ -44,7 +49,7 @@ class EstadoCivilSelectController {
         $sentencia = "select id,nombre,detalle from estado_civil ec"
                 . " where nombre ilike '%$this->referencia_a_buscar%' or "
                 . " detalle ilike '%$this->referencia_a_buscar%';";
-        $this->respuesta = $dbName->consultar_todos($sentencia);
+        $this->respuesta = $dbName->consultar_script($sentencia);
     }
 
     private function consultar_estado_civil_por_nombre() {
@@ -52,7 +57,7 @@ class EstadoCivilSelectController {
         $dbName = new DataBase($this->db);
         $sentencia = "select id,nombre,detalle from estado_civil ec"
                 . " where nombre ilike '$this->referencia_a_buscar';";
-        $this->respuesta = $dbName->consultar_todos($sentencia);
+        $this->respuesta = $dbName->consultar_script($sentencia);
     }
 
     private function consultar_estado_civil_por_id() {
@@ -61,23 +66,21 @@ class EstadoCivilSelectController {
             $dbName = new DataBase($this->db);
             $id_a_buscar = intval($this->referencia_a_buscar);
             $sentencia = "select id, nombre, detalle from estado_civil ec where id = $id_a_buscar;";
-            $this->respuesta = $dbName->consultar_uno($sentencia);     
+            $this->respuesta = $dbName->consultar_script($sentencia);
         } else {
             $this->respuesta = null;
         }
     }
 
-     public function generar_respuesta() {
-        PRINT_R($this->respuesta);
+    public function generar_respuesta() {
         if (isset($this->respuesta)) {
             if (empty($this->respuesta)) {
-                 return array(
+                return array(
                     'estado' => 'OK',
                     'datos_base' => $this->respuesta,
                     'filas' => '0'
                 );
             } else {
-                PRINT_R("ENTRO AQUI");
                 return array(
                     'estado' => 'OK',
                     'datos_base' => $this->respuesta,
@@ -87,7 +90,7 @@ class EstadoCivilSelectController {
         } else {
             return array(
                 'estado' => 'ERROR',
-                'datos_base' => 'vacio',
+                'datos_base' => null,
                 'filas' => '0'
             );
         }
