@@ -19,7 +19,7 @@ class UsuarioController
                         where u.email = '$this->email'
                         and  bu.idusuarios =u.idusuarios
                         and  bu.idbaseusuario = b.idbaseusuario ;";       
-        $this->respuesta = $dbName->consultar_todos($sentencia);
+        $this->respuesta = $dbName->consultar_script($sentencia);
     }
     public function generar_respuesta() {        
         if(isset($this->respuesta) && count($this->respuesta)>0)
@@ -33,7 +33,7 @@ class UsuarioController
         {
             return array(
                 'estado'=>'ERROR',
-                'datos_base'=>'vacio'               
+                'datos_base'=>null               
             );
         }
     } 
