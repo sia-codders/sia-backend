@@ -12,6 +12,8 @@ class Mensajes {
     public $mensajeERROR = "ERROR";
     public $datos_insertador = "DATOS INSERTADOR";
     public $datos_no_insertador = "DATOS NO INSERTADOR";
+    public $numero_cero = 0;
+
 
     public $datos_correctos = "DATOS CORRECTOS";
     public $no_bases_usuario = "NO EXISTEN BASES PARA ESTE USUARIO";
