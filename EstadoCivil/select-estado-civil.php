@@ -3,21 +3,35 @@
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: *");
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-//Variable respuesta json
-$respuesta_consulta = null;
-//Por que tipo de metodo se envia la informacion
+
+//Llama libreria helper
+require_once('../Helpers/Helpers.php');
+$obj_helper = new Helpers();
+
+//Llama libreia Mensaje
+require_once('../Helpers/Mensajes.php');
+$obj_mensaje = new Mensajes();
+
+//por cual tipo de metodo es enviada la informacion
 $method = $_SERVER['REQUEST_METHOD'];
 $salto_de_linea = "\n";
 echo $salto_de_linea;
+
+//Variables para respuestas
+$filas_respuesta = $obj_mensaje->numero_cero;
+$array_respuesta = null;
+
 if ($method == 'GET') {
-    require_once('./EstadoCivilSelectController.php');
-    require_once('../Helpers/Helpers.php');
+    
+    $nombre_controlador="EstadoCivilSelectController";
+    require_once("./{$nombre_controlador}.php");
 
     if ($_GET && isset($_GET['json']) && isset(getallheaders()['token'])) {
         //cuando los parametros GET esten OK              
         $json = $_GET['json'];
         $token = getallheaders()['token'];
         $helper = new Helpers();
+        
         if ($helper->validar_token($token)) {
             //R1 : PENDIENTE GENERAR UN VALIDADOS DE NUMEROS, CUANDO ENVIE S-I
             $controlador = new EstadoCivilSelectController($json);
