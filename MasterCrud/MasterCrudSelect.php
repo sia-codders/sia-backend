@@ -44,7 +44,6 @@ class MasterCrudSelect
             );
         }
         return $array_resp;
-        
     }
     
 }
