@@ -12,4 +12,4 @@ $obj_helper = new Helpers();
 $method = $_SERVER['REQUEST_METHOD'];
 
 //parametros a enviar 1.-Nombre del controlador, 2.- Metodo, 3.- el arregllo POST, 4.- el arreglo Cabecera, 5.- el nombre del token
-$obj_helper->validar_metodoHTTP_POST("UsuarioSelectController", $method, $_POST, getallheaders(), getallheaders()['nombre_token']);
+$obj_helper->validar_metodoHTTP_POST_select("UsuarioSelectController", $method, $_POST, getallheaders(), getallheaders()['nombre_token']);
