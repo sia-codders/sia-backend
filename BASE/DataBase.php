@@ -16,15 +16,24 @@ class DataBase {
     }
 
     public function execute($script) {
-        print_r('ANTES DE INSERT');
+        //print_r('ANTES DE INSERT');
         print_r($script); 
         
         $resp = false;
-        if (pg_query($this->conn, $script)) {
+        $conn = pg_connect("host=$this->dbHost dbname=$this->dbBase user=$this->dbUse password=$this->dbPass port=$this->dbPort");
+        $querysql = "insert into usuario(correo, contrasenia, nombrecompleto, token, usucreo, fechacreo, usumodifico, fechamodifico,activo) "
+        . "values('scr@gmail.com3', '12345', 'David Clavijo','12344 07-10-2021 09:35:14 pm','Santiago Clavijo','2021-09-03', null, null, true)";
+        $query = pg_query($conn,$querysql);
+        if($query)
             $resp = true;
-        }
+          else{
+            echo "Ocurri&oacute; un error! ".pg_last_error();
+            die();
+            
+          }
+          return $resp;
         pg_close($this->conn);
-        return $resp;
+        
     }
 
     public function insert($array_parametros, $table_name) {
