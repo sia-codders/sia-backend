@@ -46,7 +46,7 @@ class UsuarioInsertController {
          $sentencia = "INSERT INTO public.usuario "
           . "(correo, contrasenia, nombrecompleto, token, usucreo, fechacreo, usumodifico, fechamodifico, activo) "
           . "VALUES('$this->correo', '$this->contrasenia', '$this->nombre_completo','{$this->contrasenia} ".date('d-m-Y h:i:s a', time())
-          . "','$this->usuCreo', current_timestamp, '', null, true);"; 
+          . "','$this->usuCreo', current_date, null, null, true);"; 
         
         $this->respuesta = $this->obj_master_insert->insertar_base($sentencia);
        
